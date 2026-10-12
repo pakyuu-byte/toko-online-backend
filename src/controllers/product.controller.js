@@ -1,23 +1,34 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-exports.getAllProducts = async (req, res) => {
-  try {
-    const products = await prisma.product.findMany();
-    res.json(products);
-  } catch (error) {
-    res.json([]); // kalau model belum ada, kembalikan kosong dulu
-  }
+const getAll = async (req, res) => {
+  const products = await prisma.product.findMany();
+  res.json(products);
 };
 
-exports.createProduct = async (req, res) => {
-  try {
-    const { name, price, stock } = req.body;
-    const product = await prisma.product.create({
-      data: { name, price: parseFloat(price), stock: parseInt(stock) }
-    });
-    res.status(201).json(product);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+const getById = async (req, res) => {
+  const product = await prisma.product.findUnique({ 
+    where: { id: parseInt(req.params.id) } 
+  });
+  res.json(product);
 };
+
+const create = async (req, res) => {
+  const product = await prisma.product.create({ data: req.body });
+  res.status(201).json(product);
+};
+
+const update = async (req, res) => {
+  const product = await prisma.product.update({ 
+    where: { id: parseInt(req.params.id) }, 
+    data: req.body 
+  });
+  res.json(product);
+};
+
+const del = async (req, res) => {
+  await prisma.product.delete({ where: { id: parseInt(req.params.id) } });
+  res.json({ message: 'deleted' });
+};
+
+module.exports = { getAll, getById, create, update, delete: del };
