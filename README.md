@@ -1,23 +1,25 @@
-# Toko Online Backend - Modul 4
+# Toko Online Backend - E-Commerce API
 
-Backend REST API untuk Toko Online, dibangun dengan Express + Prisma + PostgreSQL. Fokus Modul 4: Database Sync & Auth JWT.
+Backend REST API untuk toko online sederhana. Dibuat dengan Node.js, Express, Prisma + MySQL.
 
-## 🚀 Tech Stack
-- Node.js + Express
-- Prisma ORM v6.19.3
-- PostgreSQL
-- bcrypt (hash password)
-- jsonwebtoken (JWT)
+> Status: Modul Checkout ✅ LULUS
 
-## ✅ Progress Modul 4 (12 Okt 2026)
+## Tech Stack
+- **Runtime:** Node.js + Express
+- **Database:** MySQL + Prisma ORM
+- **Auth:** JWT (Bearer Token)
+- **Password:** bcrypt
 
-### 1. Prisma Setup & Migration
+## Fitur
+- Auth: register & login
+- Products: CRUD produk
+- Cart: tambah, lihat, hapus item keranjang
+- Orders: checkout & lihat riwayat pesanan (PENDING)
+
+## Cara Jalanin di Lokal
+
+1. Clone & install
 ```bash
-generator client { provider = "prisma-client-js" }
-datasource db {
-  provider = "postgresql"
-  url = env("DATABASE_URL")
-}
-model User { id Int @id @default(autoincrement()) email String @unique password String name String? role String @default("USER") createdAt DateTime @default(now()) }
-model Product { id Int @id @default(autoincrement()) name String description String? price Float stock Int @default(0) createdAt DateTime @default(now()) }
-model Order { id Int @id @default(autoincrement()) userId Int total Float status String @default("PENDING") createdAt DateTime @default(now()) }
+git clone https://github.com/pakyuu-byte/toko-online-backend.git
+cd toko-online-backend
+npm install
