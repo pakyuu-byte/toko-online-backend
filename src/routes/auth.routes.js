@@ -1,41 +1,26 @@
-const express = require('express');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { PrismaClient } = require('@prisma/client');
-const router = express.Router();
-const prisma = new PrismaClient();
+const express=require('express'); 
+const router=express.Router();
+const {PrismaClient}=require('@prisma/client'); 
+const prisma=new PrismaClient(); 
+const bcrypt=require('bcryptjs'); 
+const jwt=require('jsonwebtoken');
 
-router.post('/register', async (req, res) => {
-  try {
-    const { email, password, name } = req.body;
-    const hashed = await bcrypt.hash(password, 10);
-    const user = await prisma.user.create({
-      data: { email, password: hashed, name }
-    });
-    res.json({ message: 'User created', user: { id: user.id, email: user.email } });
-  } catch (e) {
-    res.status(400).json({ error: 'Email sudah dipakai', detail: e.message });
-  }
+router.post('/register', async(req,res)=>{
+ try{
+  const {email,password,name}=req.body; 
+  const hash=await bcrypt.hash(password,10); 
+  const u=await prisma.user.create({data:{email,password:hash,name}}); 
+  res.json(u);
+ }catch(e){ res.status(400).json({error:e.message}) }
 });
 
-router.post('/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) return res.status(404).json({ error: 'User tidak ditemukan' });
-    
-    const ok = await bcrypt.compare(password, user.password);
-    if (!ok) return res.status(401).json({ error: 'Password salah' });
-
-    const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' }
-    );
-    res.json({ message: 'Login sukses', token });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
+router.post('/login', async(req,res)=>{
+ const {email,password}=req.body; 
+ const u=await prisma.user.findUnique({where:{email}}); 
+ if(!u) return res.status(401).json({message:'no user'}); 
+ const ok=await bcrypt.compare(password,u.password); 
+ if(!ok) return res.status(401).json({message:'wrong pass'}); 
+ const token=jwt.sign({id:u.id,email:u.email}, process.env.JWT_SECRET||'rahasia'); 
+ res.json({token}); 
 });
-
-module.exports = router;
+module.exports=router;

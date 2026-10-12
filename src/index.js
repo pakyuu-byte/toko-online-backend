@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
 const { PrismaClient } = require('@prisma/client');
 
 const app = express();
@@ -15,6 +14,12 @@ app.use('/api/products', productRoutes);
 
 const authRoutes = require('./routes/auth.routes');
 app.use('/api/auth', authRoutes);
+
+const cartRoutes = require('./routes/cart.routes');
+app.use('/api/cart', cartRoutes);
+
+const orderRoutes = require('./routes/order.routes');
+app.use('/api/orders', orderRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'API Toko Online Jalan!' });
