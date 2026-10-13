@@ -15,14 +15,14 @@
   "devDependencies": {
     "prisma": "^6.10.0"
   },
+{
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
-    "postinstall": "prisma generate",
-    "vercel-build": "npx prisma generate && npm run build"
-  },
-  "engines": {
-    "node": "24.x"
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "vercel-build": "npx prisma generate && npx tsc",
+    "seed": "ts-node prisma/seed.ts"
   }
+}
 }
 
