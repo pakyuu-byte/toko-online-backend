@@ -19,7 +19,7 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "postinstall": "prisma generate",
-    "vercel-build": "prisma generate && prisma migrate deploy"
+    "vercel-build": "npx prisma generate && npm run build"
   },
   "engines": {
     "node": "24.x"
