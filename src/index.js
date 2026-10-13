@@ -21,15 +21,14 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/payment', paymentRoutes);
 
 app.get('/', (req, res) => {
-  res.json({ message: 'API Toko Online Jalan!' });
+  res.json({ message: 'API Toko Online Jalan! 🚀', status: 'LIVE' });
 });
 
-const PORT = process.env.PORT || 3000;
+module.exports = app;
 
 if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
 }
-
-module.exports = app;
